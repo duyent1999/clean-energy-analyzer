@@ -1,0 +1,82 @@
+name: Deploy Clean-Energy App
+
+on:
+    push:
+      branches:
+        - main
+
+jobs:
+    deploy-aws:
+      runs-on: ubuntu-latest  # Use GitHub-hosted runner for AWS and Terraform
+      steps:
+        # Step 1: Checkout the repository
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        # Step 2: Set up Terraform
+        - name: Set up Terraform
+          uses: hashicorp/setup-terraform@v2
+          with:
+            terraform_version: 1.3.0
+  
+        # Step 3: Configure AWS credentials
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v3
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+  
+        # Step 4: Initialize Terraform
+        - name: Terraform Init
+          run: terraform init
+          working-directory: ./terraform
+  
+        # Step 5: Validate Terraform configuration
+        - name: Terraform Validate
+          run: terraform validate
+          working-directory: ./terraform
+  
+        # Step 6: Plan Terraform changes
+        - name: Terraform Plan
+          run: terraform plan
+          working-directory: ./terraform
+  
+        # Step 7: Apply Terraform changes
+        - name: Terraform Apply
+          run: terraform apply -auto-approve
+          working-directory: ./terraform
+  
+    build-and-push-docker:
+      runs-on: ubuntu-latest  # Use GitHub-hosted runner for Docker
+      needs: deploy-aws
+      steps:
+        # Step 1: Checkout the repository
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        # Step 2: Log in to Docker Hub (or another container registry)
+        - name: Log in to Docker Hub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_TOKEN }}
+  
+        # Step 3: Build and push Docker image
+        - name: Build and push Docker image
+          run: |
+            docker build -t your-dockerhub-username/weather-app:latest ./weather-app
+            docker push your-dockerhub-username/weather-app:latest
+  
+    deploy-to-kubernetes:
+      runs-on: self-hosted  # Use self-hosted runner for local Kubernetes
+      needs: build-and-push-docker
+      steps:
+        # Step 1: Checkout the repository
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        # Step 2: Deploy to local Kubernetes (e.g., Minikube or Kind)
+        - name: Deploy to Kubernetes
+          run: |
+            kubectl apply -f ./kubernetes-manifests.yaml
