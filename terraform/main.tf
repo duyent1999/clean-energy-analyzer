@@ -40,7 +40,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 
 resource "aws_lambda_function" "clean_energy_lambda" {
   function_name = "clean-energy-lambda"
-  role          = aws_iam_role.lambda_exec.arn
+  role          = aws_iam_role.lambda_exec_role.arn
 
   # Use the ECR image URI
   image_uri = "${var.accountID}.dkr.ecr.${var.aws_region}.amazonaws.com/clean-energy-lambda:latest"
