@@ -121,6 +121,6 @@ resource "aws_lambda_function" "clean_energy_lambda" {
 
 # CloudWatch Log Group for Lambda
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
-  name              = "/aws/lambda/${aws_lambda_function.my_lambda.function_name}"
+  name              = "/aws/lambda/${aws_lambda_function.clean_energy_lambda.function_name}"
   retention_in_days = var.cloudwatch_log_retention
 }
