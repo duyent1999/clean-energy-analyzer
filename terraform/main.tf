@@ -38,24 +38,23 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Create the Lambda function
 resource "aws_lambda_function" "clean_energy_lambda" {
-  function_name = "clean_energy_lambda"
-  role          = aws_iam_role.lambda_exec_role.arn
-  handler       = "clean-energy.lambda_handler"
-  runtime       = "python3.9"
+  function_name = "clean-energy-lambda"
+  role          = aws_iam_role.lambda_exec.arn
 
-  filename         = data.archive_file.lambda_zip.output_path
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  # Use the ECR image URI
+  image_uri = "${var.accountID}.dkr.ecr.${var.aws_region}.amazonaws.com/clean-energy-lambda:latest"
 
+  # Specify the package type as "Image"
+  package_type = "Image"
+
+  # Environment variables (if needed)
   environment {
     variables = {
-      OPENWEATHER_API_KEY = local.openweather_api_key
-      NREL_API_KEY = local.nrel_api_key
+      OPEN_WEATHER_API_KEY = local.openweather_api_key
+      NREL_API_KEY         = local.nrel_api_key
     }
   }
-
-  depends_on = [data.archive_file.lambda_zip]
 }
 
 # IAM Policy for Lambda to access S3 and CloudWatch
