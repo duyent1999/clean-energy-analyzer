@@ -15,7 +15,7 @@ data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
 
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role_v6"
+  name = "lambda_exec_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -33,7 +33,7 @@ resource "aws_iam_role" "lambda_exec_role" {
 
 
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "lambda_policy_v6"
+  name        = "lambda_policy"
   description = "Policy for Lambda to access S3, CloudWatch, and ECR"
 
   policy = jsonencode({
@@ -61,20 +61,6 @@ resource "aws_iam_policy" "lambda_policy" {
           "logs:PutLogEvents"
         ]
         Resource = "*"
-      },
-      # ECR Permissions
-      {
-        Effect = "Allow"
-        Action = [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "ecr:GetAuthorizationToken",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:BatchCheckLayerAvailability"
-        ]
-        Resource = "*"
       }
     ]
   })
@@ -92,26 +78,24 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 }
 
 
+# Create the Lambda function
 resource "aws_lambda_function" "clean_energy_lambda" {
-  function_name = "clean-energy-lambda"
+  function_name = "clean_energy_lambda"
   role          = aws_iam_role.lambda_exec_role.arn
-  handler       = var.lambda_handler
-  runtime       = var.lambda_runtime
+  handler       = "clean-energy.lambda_handler"
+  runtime       = "python3.9"
 
-  # Use the ECR image URI
-  image_uri = "${var.accountID}.dkr.ecr.${var.aws_region}.amazonaws.com/clean-energy-lambda:latest"
+  filename         = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
-  # Specify the package type as "Image"
-  package_type = "Image"
-
-  # Environment variables (if needed)
   environment {
     variables = {
-      OPEN_WEATHER_API_KEY = local.openweather_api_key
-      NREL_API_KEY         = local.nrel_api_key
-      BUCKET_NAME          = "clean-energy-bucket"
+      OPENWEATHER_API_KEY = local.openweather_api_key
+      NREL_API_KEY = local.nrel_api_key
     }
   }
+
+  depends_on = [data.archive_file.lambda_zip]
 }
 
 
