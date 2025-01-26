@@ -63,3 +63,9 @@ variable "nrel_api_key" {
   sensitive   = true
   default     = " "
 }
+
+variable "lambda_image_uri" {
+  description = "URI of the Docker image for the Lambda function"
+  type        = string
+  default     = " "
+}
