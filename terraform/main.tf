@@ -37,7 +37,9 @@ resource "aws_lambda_function" "clean_energy_lambda" {
       OPENWEATHER_API_KEY = var.openweather_api_key
     }
   }
+  depends_on = [data.archive_file.lambda_zip]
 }
+
 # IAM Policy for Lambda to access S3 and CloudWatch
 resource "aws_iam_policy" "lambda_policy" {
   name        = "lambda_policy"
