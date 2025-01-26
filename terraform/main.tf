@@ -16,7 +16,7 @@ data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
 
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role"
+  name = "lambda_exec_role_v1"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
