@@ -15,7 +15,7 @@ data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
 
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role_v2"
+  name = "lambda_exec_role_v3"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -32,34 +32,14 @@ resource "aws_iam_role" "lambda_exec_role" {
 }
 
 
-resource "aws_iam_policy" "lambda_policy" {
-  name        = "lambda_policy_v2"
-  description = "Policy for Lambda to access S3, CloudWatch, and ECR"
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "lambda_policy_v3"
+  role = aws_iam_role.lambda_exec_role.name
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:ListBucket"
-        ]
-        Resource = [
-          "arn:aws:s3:::clean-energy-bucket",
-          "arn:aws:s3:::clean-energy-bucket/*"
-        ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = "*"
-      },
+      # ECR Permissions
       {
         Effect = "Allow"
         Action = [
@@ -72,15 +52,43 @@ resource "aws_iam_policy" "lambda_policy" {
           "ecr:BatchCheckLayerAvailability"
         ]
         Resource = "*"
+      },
+      # S3 Permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::clean-energy-bucket",
+          "arn:aws:s3:::clean-energy-bucket/*"
+        ]
+      },
+      # CloudWatch Logs Permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
       }
     ]
   })
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 # Attach the IAM Policy to the IAM Role
 resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = aws_iam_policy.lambda_policy.arn
+  policy_arn = aws_iam_role_policy.lambda_policy.arn
 }
 
 
