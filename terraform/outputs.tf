@@ -1,6 +1,6 @@
 output "lambda_function_name" {
   description = "The name of the Lambda function"
-  value       = aws_lambda_function.my_lambda.function_name
+  value       = aws_lambda_function.clean_energy_lambda.function_name
 }
 
 output "s3_bucket_name" {
@@ -15,5 +15,5 @@ output "lambda_role_arn" {
 
 output "lambda_function_arn" {
   description = "The ARN of the Lambda function"
-  value       = aws_lambda_function.weather_lambda.arn
+  value       = aws_lambda_function.clean_energy_lambda.arn
 }

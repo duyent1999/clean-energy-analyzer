@@ -29,14 +29,15 @@ resource "aws_lambda_function" "clean_energy_lambda" {
   handler       = "clean-energy.lambda_handler"
   runtime       = "python3.9"
 
-  filename         = "lambda_function_payload.zip"
-  source_code_hash = filebase64sha256("lambda_function_payload.zip")
+  filename         = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   environment {
     variables = {
       OPENWEATHER_API_KEY = var.openweather_api_key
     }
   }
+
   depends_on = [data.archive_file.lambda_zip]
 }
 
