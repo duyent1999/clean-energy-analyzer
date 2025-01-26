@@ -63,8 +63,17 @@ resource "aws_iam_policy" "lambda_policy" {
           "logs:PutLogEvents"
         ]
         Resource = "*"
-      },
-      # ECR Permissions
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_ecr_access" {
+  role = aws_iam_role.lambda_exec_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
         Effect = "Allow"
         Action = [
