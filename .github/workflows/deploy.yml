@@ -39,8 +39,11 @@ jobs:
   
         # Step 6: Plan Terraform changes
         - name: Terraform Plan
-          run: terraform plan
+          run: terraform plan -input=false -lock-timeout=5m
           working-directory: ./terraform
+          env:
+            TF_VAR_openweather_api_key: ${{secrets.OPENWEATHER_API_KEY}}
+            TF_LOG: DEBUG  # Enable Terraform debug logs
   
         # Step 7: Apply Terraform changes
         - name: Terraform Apply
