@@ -32,27 +32,13 @@ resource "aws_iam_role" "lambda_exec_role" {
 }
 
 
-resource "aws_iam_role_policy" "lambda_policy" {
-  name = "lambda_policy_v3"
-  role = aws_iam_role.lambda_exec_role.name
+resource "aws_iam_policy" "lambda_policy" {
+  name        = "lambda_policy_v3"
+  description = "Policy for Lambda to access S3, CloudWatch, and ECR"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # ECR Permissions
-      {
-        Effect = "Allow"
-        Action = [
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "ecr:GetAuthorizationToken",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:BatchCheckLayerAvailability"
-        ]
-        Resource = "*"
-      },
       # S3 Permissions
       {
         Effect = "Allow"
@@ -73,6 +59,20 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
+        ]
+        Resource = "*"
+      },
+      # ECR Permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:GetAuthorizationToken",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:BatchCheckLayerAvailability"
         ]
         Resource = "*"
       }
