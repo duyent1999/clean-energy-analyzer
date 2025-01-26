@@ -14,7 +14,6 @@ data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
 }
 
 
-
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
   name = "lambda_exec_role"
@@ -35,7 +34,7 @@ resource "aws_iam_role" "lambda_exec_role" {
 
 # IAM Policy for Lambda to access S3, CloudWatch and ECR
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "lambda_policy"
+  name        = "lambda_policy_v1"
   description = "Policy for Lambda to access S3, CloudWatch, and ECR"
 
   policy = jsonencode({
@@ -101,6 +100,8 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
 resource "aws_lambda_function" "clean_energy_lambda" {
   function_name = "clean-energy-lambda"
   role          = aws_iam_role.lambda_exec_role.arn
+  handler       = var.lambda_handler
+  runtime       = var.lambda_runtime
 
   # Use the ECR image URI
   image_uri = "${var.accountID}.dkr.ecr.${var.aws_region}.amazonaws.com/clean-energy-lambda:latest"
@@ -113,33 +114,11 @@ resource "aws_lambda_function" "clean_energy_lambda" {
     variables = {
       OPEN_WEATHER_API_KEY = local.openweather_api_key
       NREL_API_KEY         = local.nrel_api_key
+      BUCKET_NAME          = "clean-energy-bucket"
     }
   }
 }
 
-
-# S3 Bucket
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = var.s3_bucket_name
-}
-
-# Lambda Function
-resource "aws_lambda_function" "my_lambda" {
-  function_name = var.lambda_function_name
-  role          = aws_iam_role.lambda_exec_role.arn
-  handler       = var.lambda_handler
-  runtime       = var.lambda_runtime
-
-  # Use a Docker container image
-  image_uri     = local.lambda_image_uri 
-  package_type  = "Image"               
-
-  environment {
-    variables = {
-      BUCKET_NAME = aws_s3_bucket.my_bucket.bucket
-    }
-  }
-}
 
 # CloudWatch Log Group for Lambda
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
