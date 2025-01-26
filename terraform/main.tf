@@ -15,7 +15,7 @@ data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
 
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role_v5"
+  name = "lambda_exec_role_v6"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -33,7 +33,7 @@ resource "aws_iam_role" "lambda_exec_role" {
 
 
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "lambda_policy_v5"
+  name        = "lambda_policy_v6"
   description = "Policy for Lambda to access S3, CloudWatch, and ECR"
 
   policy = jsonencode({
