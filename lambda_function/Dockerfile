@@ -1,8 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
-
-# Set the working directory
-WORKDIR /app
+FROM public.ecr.aws/lambda/python:3.9
 
 # Copy the requirements file
 COPY requirements.txt .
@@ -13,11 +10,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY clean-energy.py .
 
-# Set environment variables
-ENV OPENWEATHER_API_KEY=your_api_key_here
-
-# Expose the port (optional, for HTTP servers)
-EXPOSE 8080
-
 # Run the application
-CMD ["python", "clean-energy.py"]
+CMD ["clean-energy.lambda_handler"]
