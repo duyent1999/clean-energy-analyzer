@@ -32,10 +32,10 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
-# IAM Policy for Lambda to access S3, CloudWatch and ECR
+# IAM Policy for Lambda to access S3 and CloudWatch
 resource "aws_iam_policy" "lambda_policy" {
   name        = "lambda_policy_v1"
-  description = "Policy for Lambda to access S3, CloudWatch, and ECR"
+  description = "Policy for Lambda to access S3 and CloudWatch"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -49,8 +49,8 @@ resource "aws_iam_policy" "lambda_policy" {
           "s3:ListBucket"
         ]
         Resource = [
-          aws_s3_bucket.my_bucket.arn,
-          "${aws_s3_bucket.my_bucket.arn}/*"
+          "arn:aws:s3:::clean-energy-bucket",      
+          "arn:aws:s3:::clean-energy-bucket/*"      
         ]
       },
       # CloudWatch Logs Permissions
@@ -66,7 +66,6 @@ resource "aws_iam_policy" "lambda_policy" {
     ]
   })
 }
-
 resource "aws_iam_role_policy" "lambda_ecr_access" {
   role = aws_iam_role.lambda_exec_role.name
 
