@@ -1,3 +1,19 @@
+locals {
+  # Retrieve the secret from AWS Secrets Manager
+  clean_energy_secrets = jsondecode(data.aws_secretsmanager_secret_version.clean_energy_secrets.secret_string)
+
+  # Extract the API keys from the secret
+  openweather_api_key = local.clean_energy_secrets["OPENWEATHER_API_KEY"]
+  nrel_api_key         = local.clean_energy_secrets["NREL_API_KEY"]
+}
+
+# Data source to fetch the secret from AWS Secrets Manager
+data "aws_secretsmanager_secret_version" "clean_energy_secrets" {
+  secret_id = "clean-energy-secrets"
+}
+
+
+
 # Create an IAM role for the Lambda function
 resource "aws_iam_role" "lambda_exec_role" {
   name = "lambda_exec_role"
@@ -34,7 +50,8 @@ resource "aws_lambda_function" "clean_energy_lambda" {
 
   environment {
     variables = {
-      OPENWEATHER_API_KEY = var.openweather_api_key
+      OPENWEATHER_API_KEY = local.openweather_api_key
+      NREL_API_KEY = local.nrel_api_key
     }
   }
 

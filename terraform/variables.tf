@@ -46,10 +46,12 @@ variable "openweather_api_key" {
   description = "API key for OpenWeatherMap"
   type        = string
   sensitive   = true
+  default     = " "
 }
 
 variable "nrel_api_key" {
   description = "API key for NREL"
   type        = string
   sensitive   = true
+  default     = " "
 }
