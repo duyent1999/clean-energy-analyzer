@@ -1,3 +1,11 @@
+import requests
+import boto3
+import datetime
+import json
+from botocore.exceptions import ClientError
+from datetime import datetime
+
+
 
 def get_secret():
     secret_name = "clean-energy-secrets"
@@ -47,13 +55,13 @@ def lambda_handler(event, context):
             'weather_description': weather_description,
             'humidity': humidity,
             'wind_speed': wind_speed,
-            'timestamp': datetime.utcnow().isoformat()  # Add a timestamp
+            'timestamp': datetime.now().isoformat()  # Add a timestamp
         }
 
         # Step 7: Store the data in S3
         s3 = boto3.client('s3')
         bucket_name = 'clean-energy-bucket'  # Replace with your S3 bucket name
-        file_key = f'weather-data/{city}/.json'
+        file_key = f'weather-data/{city}/{city}.json'
 
         s3.put_object(
             Bucket=bucket_name,

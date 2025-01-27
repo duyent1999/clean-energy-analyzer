@@ -34,7 +34,7 @@ resource "aws_iam_role" "lambda_exec_role" {
 
 resource "aws_iam_policy" "lambda_policy" {
   name        = "lambda_policy"
-  description = "Policy for Lambda to access S3, CloudWatch, and ECR"
+  description = "Policy for Lambda to access S3, CloudWatch, ECR, and Secrets Manager"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -61,6 +61,14 @@ resource "aws_iam_policy" "lambda_policy" {
           "logs:PutLogEvents"
         ]
         Resource = "*"
+      },
+      # Secrets Manager Permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = "arn:aws:secretsmanager:us-east-1:423623854900:secret:clean-energy-secrets-eYxXmC"
       }
     ]
   })
@@ -88,11 +96,14 @@ resource "aws_lambda_function" "clean_energy_lambda" {
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
+  timeout = 900
+
   environment {
     variables = {
       OPENWEATHER_API_KEY = local.openweather_api_key
       NREL_API_KEY = local.nrel_api_key
     }
+
   }
 
   depends_on = [data.archive_file.lambda_zip]

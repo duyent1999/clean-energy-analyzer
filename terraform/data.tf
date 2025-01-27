@@ -1,8 +1,9 @@
-# Zip the Lambda function code
+#Zip Lambda Function
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda_function"
-  output_path = "${path.module}/lambda_function_payload.zip"
+  source_dir  = "../lambda_function"  
+  output_path = "./lambda_function.zip"
 }
 
 # AMI
