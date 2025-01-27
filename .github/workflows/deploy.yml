@@ -65,21 +65,3 @@ jobs:
             username: ${{ secrets.DOCKER_HUB_USERNAME }}
             password: ${{ secrets.DOCKER_HUB_TOKEN }}
   
-        # Step 3: Build and push Docker image
-        - name: Build and push Docker image
-          run: |
-            docker build -t your-dockerhub-username/weather-app:latest ./weather-app
-            docker push your-dockerhub-username/weather-app:latest
-  
-    deploy-to-kubernetes:
-      runs-on: self-hosted  # Use self-hosted runner for local Kubernetes
-      needs: build-and-push-docker
-      steps:
-        # Step 1: Checkout the repository
-        - name: Checkout repository
-          uses: actions/checkout@v3
-  
-        # Step 2: Deploy to local Kubernetes (e.g., Minikube or Kind)
-        - name: Deploy to Kubernetes
-          run: |
-            kubectl apply -f ./kubernetes-manifests.yaml
