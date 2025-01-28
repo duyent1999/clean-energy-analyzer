@@ -1,17 +1,12 @@
-#Install Dependencies
-
 resource "null_resource" "install_dependencies" {
   provisioner "local-exec" {
-    command = <<EOT
-      pip install -r lambda_function/requirements.txt -t lambda_function/
-    EOT
+    command = "pip install -r ../lambda_function/requirements.txt -t ../lambda_function/"
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
-
 
 #Zip Lambda Function
 
