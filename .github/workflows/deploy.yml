@@ -7,11 +7,16 @@ on:
 
 jobs:
     deploy-aws:
-      runs-on: ubuntu-latest  # Use GitHub-hosted runner for AWS and Terraform
+      runs-on: ubuntu-latest  
       steps:
         # Step 1: Checkout the repository
         - name: Checkout repository
           uses: actions/checkout@v3
+
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.9'  
   
         # Step 2: Set up Terraform
         - name: Set up Terraform
