@@ -28,8 +28,7 @@ def lambda_handler(event, context):
         if not api_key:
             raise Exception("secret not found in secrets")
 
-        # Define the city and API endpoint
-        city = event.get('city', 'London')  
+        city = event['queryStringParameters']['city'] if event['queryStringParameters'] else 'New York'
         url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
 
         # Make the API request

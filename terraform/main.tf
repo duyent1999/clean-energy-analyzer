@@ -5,7 +5,6 @@ locals {
   # Extract the API keys from the secret
   openweather_api_key = local.clean_energy_secrets["OPENWEATHER_API_KEY"]
   nrel_api_key         = local.clean_energy_secrets["NREL_API_KEY"]
-  lambda_image_uri     = "${var.accountID}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.lambda_function_name}:latest"
 }
 
 # Data source to fetch the secret from AWS Secrets Manager
