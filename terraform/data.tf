@@ -1,3 +1,5 @@
+#Install Dependencies
+
 resource "null_resource" "install_dependencies" {
   provisioner "local-exec" {
     command = "pip install -r ../lambda_function/requirements.txt -t ../lambda_function/"

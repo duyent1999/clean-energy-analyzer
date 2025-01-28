@@ -1,4 +1,4 @@
-name: Deploy Clean-Energy App
+name: Deploy Clean-Energy-Forecast App
 
 on:
     push:
