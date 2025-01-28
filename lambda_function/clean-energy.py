@@ -29,10 +29,14 @@ def lambda_handler(event, context):
             raise Exception("secret not found in secrets")
 
         city = city = event.get('queryStringParameters', {}).get('city', 'New York') 
-        #city = event.get('city', 'New York') 
+        if not city:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'City parameter is missing'})
+            }
+        
+        #API request
         url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
-
-        # Make the API request
         response = requests.get(url)
         response.raise_for_status()
 
