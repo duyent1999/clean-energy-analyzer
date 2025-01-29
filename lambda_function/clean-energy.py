@@ -90,8 +90,7 @@ def lambda_handler(event, context):
 
         # Get energy estimation
         energy = {
-            'solar': get_pvwatts_estimate(lat, lon),
-            'wind': get_wind_estimate(lat, lon)
+            'solar': get_pvwatts_estimate(lat, lon)
         }
         
         return success_response({
@@ -137,24 +136,6 @@ def get_pvwatts_estimate(lat: float, lon: float) -> dict:
     response.raise_for_status()
     return response.json()['outputs']
 
-def get_wind_estimate(lat: float, lon: float) -> dict:
-  
-    url = "https://developer.nrel.gov/api/wind-toolkit/v2/wind/wtk-download.json"
-    
-    params = {
-        'api_key': nrel_api_key,
-        'lat': round(lat, 4),  
-        'lon': round(lon, 4),
-        'year': '2013',  
-        'email': 'duyentran357@gmail.com', 
-        'utc': 'true', 
-        'attributes': 'windspeed_100m,power_100m',
-        'height': 100  
-    }
-    
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    return response.json()['outputs']
 
 def success_response(data: dict) -> dict:
     return {
