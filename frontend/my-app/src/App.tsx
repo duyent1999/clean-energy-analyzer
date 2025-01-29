@@ -2,54 +2,119 @@ import { useState } from 'react'
 import axios from 'axios';
 import './App.css'
 
+const VALID_CITIES = [
+  { label: 'New York, NY', value: 'New York' },
+  { label: 'Boston, MA', value: 'Boston' },
+  { label: 'Hartford, CT', value: 'Hartford' },
+  { label: 'Philadelphia, PA', value: 'Philadelphia' },
+  { label: 'Washington, DC', value: 'Washington' },
+  { label: 'Miami, FL', value: 'Miami' },
+  { label: 'Atlanta, GA', value: 'Atlanta' },
+  { label: 'Charlotte, NC', value: 'Charlotte' },
+  { label: 'Baltimore, MD', value: 'Baltimore' }
+];
+
+interface WeatherData {
+  weather: {
+    city: string;
+    temperature: number;
+    weather_description: string;
+    humidity: number;
+    wind_speed: number;
+    timestamp: string;
+  };
+  energy: {
+    solar: {
+      ac_annual: number;
+      capacity_factor: number;
+    };
+  };
+}
+
 function App() {
-  const [city, setCity] = useState('');
-  const [weatherData, setWeatherData] = useState(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async() => {
+  const API_ENDPOINT = "https://4azrnnnf10.execute-api.us-east-1.amazonaws.com/dev/{proxy+}";
 
+  const fetchData = async () => {
+    if (!selectedCity) return;
+    
     setLoading(true);
-    setError(null); 
+    setError(null);
+    setWeatherData(null);
 
     try {
-      const res = await axios.get("https://z3tjzv0tw6.execute-api.us-east-1.amazonaws.com/dev/weather", {params: {city: city}});
+      const res = await axios.get(`${API_ENDPOINT}/weather`, {
+        params: { city: selectedCity }
+      });
+      
       setWeatherData(res.data);
     } catch (err) {
-      setError("Error fetching weather data");
-      console.error(err);
+      setError(axios.isAxiosError(err) 
+        ? err.response?.data?.error || "An error occurred"
+        : "Failed to fetch data");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <>
-      <h1>Enter a city: </h1>
-      <input
-        type = "text"
-        value = {city}
-        onChange = {(e) => setCity(e.target.value)}
-        placeholder = "Enter city name"
-      />
-      <div className="card">
-        <button onClick={fetchData} disabled = {loading}>
-          {loading ? "Loading...": "Get Weather Data"}
+    <div className="app-container">
+      <h1>Clean Energy Forecast</h1>
+      
+      <div className="city-selector">
+        <select
+          value={selectedCity}
+          onChange={(e) => setSelectedCity(e.target.value)}
+          disabled={loading}
+        >
+          <option value="">Select an East Coast City</option>
+          {VALID_CITIES.map(city => (
+            <option key={city.value} value={city.value}>
+              {city.label}
+            </option>
+          ))}
+        </select>
+
+        <button 
+          onClick={fetchData} 
+          disabled={!selectedCity || loading}
+        >
+          {loading ? "Analyzing..." : "Get Analysis"}
         </button>
-        {error && <p style={{ color: "red"}}>{error}</p>}
-        {weatherData && (
-        <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "8px" }}>
-          <h2>Weather in {city} {weatherData.city}</h2>
-          <p>Temperature: {weatherData.temperature}°C</p>
-          <p>Weather: {weatherData.weather_description}</p>
-          <p>Humidity: {weatherData.humidity}%</p>
-          <p>Wind Speed: {weatherData.wind_speed} m/s</p>
-          <p>Last Updated: {weatherData.timestamp}</p>
-        </div>
-        )}
       </div>
-    </>
+
+      {error && <div className="error-message">{error}</div>}
+
+      {weatherData && (
+        <div className="results-container">
+          <div className="weather-card">
+            <h2> 🌎 Weather in {weatherData.weather.city}</h2>
+            <div className="weather-details">
+              <p>Temperature: {weatherData.weather.temperature}°F</p>
+              <p>Conditions: {weatherData.weather.weather_description}</p>
+              <p>Humidity: {weatherData.weather.humidity}%</p>
+              <p>Wind Speed: {weatherData.weather.wind_speed} mph</p>
+              <p>Last Updated: {new Date(weatherData.weather.timestamp).toLocaleString()}</p>
+            </div>
+          </div>
+
+          <div className="energy-card">
+            <h2>Energy Potential</h2>
+            <div className="energy-details">
+              <div className="solar-stats">
+                <h3>☀️ Solar Potential</h3>
+                <p>Annual Output: {weatherData.energy.solar.ac_annual.toFixed(0)} kWh</p>
+                <p>Capacity Factor: {(weatherData.energy.solar.capacity_factor * 100).toFixed(1)}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
