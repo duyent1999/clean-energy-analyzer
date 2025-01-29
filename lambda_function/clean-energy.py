@@ -138,14 +138,18 @@ def get_pvwatts_estimate(lat: float, lon: float) -> dict:
     return response.json()['outputs']
 
 def get_wind_estimate(lat: float, lon: float) -> dict:
-
+  
     url = "https://developer.nrel.gov/api/wind-toolkit/v2/wind/wtk-download.json"
+    
     params = {
         'api_key': nrel_api_key,
-        'lat': lat,
-        'lon': lon,
-        'email': 'duyentran357@gmail.com',
-        'attributes': 'windspeed_100m,power_100m'
+        'lat': round(lat, 4),  
+        'lon': round(lon, 4),
+        'year': '2013',  
+        'email': 'duyentran357@gmail.com', 
+        'utc': 'true', 
+        'attributes': 'windspeed_100m,power_100m',
+        'height': 100  
     }
     
     response = requests.get(url, params=params)
