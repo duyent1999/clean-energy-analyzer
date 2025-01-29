@@ -119,17 +119,18 @@ def get_openweather_data(city: str, state: str) -> dict:
 
 
 def get_pvwatts_estimate(lat: float, lon: float) -> dict:
-
     url = "https://developer.nrel.gov/api/pvwatts/v6.json"
     params = {
         'api_key': nrel_api_key,
-        'lat': lat,
-        'lon': lon,
+        'lat': round(lat, 4),  
+        'lon': round(lon, 4),
         'system_capacity': 4,
         'azimuth': 180,
+        'tilt': 30,  
         'array_type': 1,
         'module_type': 0,
-        'losses': 14
+        'losses': 14,
+        'timeframe': 'hourly'
     }
     
     response = requests.get(url, params=params)
