@@ -10,7 +10,7 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Deployment Instructions](#deployment-instructions)
-3. [Architecture Diagram][#architecture-diagram]
+3. [Architecture Diagram][#Architecture-Diagram]
 
 ---
 
@@ -64,5 +64,4 @@
 ---
 ## Architecture Diagram
 
-#![Architecture Diagram](clean_energy.drawio.png)
-
+![Architecture Diagram](clean_energy.drawio.png)
