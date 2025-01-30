@@ -1,6 +1,5 @@
 FROM node:18-alpine AS builder
 
-# Accept build arguments
 ARG VITE_API_ENDPOINT
 ENV VITE_API_ENDPOINT=$VITE_API_ENDPOINT
 
@@ -15,6 +14,7 @@ RUN npm ci
 
 COPY public ./public
 COPY src ./src
+COPY index.html ./
 
 RUN npm run build
 
