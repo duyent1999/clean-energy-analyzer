@@ -44,11 +44,6 @@ VALID_CITIES = {
         'lon': -75.1652,
         'state': 'PA'
     },
-    'Washington, D.C.': {
-        'lat': 38.9072,
-        'lon': -77.0369,
-        'state': 'DC'
-    },
     'Miami': {
         'lat': 25.7617,
         'lon': -80.1918,

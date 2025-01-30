@@ -7,7 +7,6 @@ const VALID_CITIES = [
   { label: 'Boston, MA', value: 'Boston' },
   { label: 'Hartford, CT', value: 'Hartford' },
   { label: 'Philadelphia, PA', value: 'Philadelphia' },
-  { label: 'Washington, DC', value: 'Washington' },
   { label: 'Miami, FL', value: 'Miami' },
   { label: 'Atlanta, GA', value: 'Atlanta' },
   { label: 'Charlotte, NC', value: 'Charlotte' },
