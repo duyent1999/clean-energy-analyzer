@@ -63,7 +63,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Clean Energy Forecast</h1>
+      <h1>Clean Energy City Analyzer</h1>
       
       <div className="city-selector">
         <select
@@ -83,7 +83,7 @@ function App() {
           onClick={fetchData} 
           disabled={!selectedCity || loading}
         >
-          {loading ? "Analyzing..." : "Get Analysis"}
+          {loading ? "Analyzing..." : "Submit"}
         </button>
       </div>
 
@@ -92,7 +92,7 @@ function App() {
       {weatherData && (
         <div className="results-container">
           <div className="weather-card">
-            <h2> 🌎 Weather in {weatherData.weather.city}</h2>
+            <h2> 🌎 Weather in {weatherData.weather.city}:</h2>
             <div className="weather-details">
               <p>Temperature: {weatherData.weather.temperature}°F</p>
               <p>Conditions: {weatherData.weather.weather_description}</p>
@@ -103,10 +103,9 @@ function App() {
           </div>
 
           <div className="energy-card">
-            <h2>Energy Potential</h2>
+            <h2>☀️Solar Potential:</h2>
             <div className="energy-details">
               <div className="solar-stats">
-                <h3>☀️ Solar Potential</h3>
                 <p>Annual Output: {weatherData.energy.solar.ac_annual.toFixed(0)} kWh</p>
                 <p>Capacity Factor: {(weatherData.energy.solar.capacity_factor * 100).toFixed(1)}%</p>
               </div>
