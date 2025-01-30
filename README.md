@@ -37,7 +37,7 @@
    This will provision:
    - An AWS Lambda function
    - API Gateway to expose the Lambda as a REST API
-   - An S3 bucket for frontend hosting
+   - An S3 bucket
    - Necessary IAM roles and policies
 
 3. **Build and Deploy Frontend:**
