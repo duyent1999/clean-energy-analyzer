@@ -18,10 +18,10 @@
 
 ### Prerequisites
 - AWS CLI configured with necessary permissions
-- Terraform installed (v1.0+ recommended)
-- Docker installed (for containerized frontend)
-- Node.js (for frontend development and testing)
-- Python (for Lambda function development)
+- Terraform
+- Docker
+- Node.js
+- Python
 
 ### Steps to Deploy
 1. **Clone the Repository:**
@@ -51,15 +51,6 @@
 
 - Access the frontend at http://localhost:8000
 - Use the UI to send requests to the API Gateway and validate responses
-
----
-
-## Overview
-
-- **Frontend:** TypeScript, React, Vite
-- **Backend:** AWS Lambda, API Gateway, and S3
-- **Infrastructure as Code:** Terraform
-- **CI/CD:** GitHub Actions
 
 ---
 ## Architecture Diagram
