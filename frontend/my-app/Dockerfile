@@ -1,5 +1,9 @@
 FROM node:18-alpine AS builder
 
+# Accept build arguments
+ARG FRONTEND_API_ENDPOINT
+ENV VITE_API_ENDPOINT=$FRONTEND_API_ENDPOINT
+
 WORKDIR /app
 
 COPY package*.json ./
