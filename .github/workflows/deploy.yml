@@ -1,4 +1,4 @@
-name: Deploy Clean-Energy-Forecast App
+name: Deploy Clean-Energy-Analyzer App
 
 on:
   push:
@@ -87,12 +87,4 @@ jobs:
             build-args: |
               VITE_API_ENDPOINT=${{ secrets.VITE_API_ENDPOINT}}
 
-      - name: Update ECS Service (Optional)
-        if: success()
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ./terraform/ecs-task-definition.json
-          service: clean-energy-service
-          cluster: energy-cluster
-          wait-for-service-stability: true
   
