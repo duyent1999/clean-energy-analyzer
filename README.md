@@ -7,6 +7,5 @@
 - **Infrastructure as Code:** Terraform
 - **CI/CD:** GitHub Actions
 
-## License
-This project is licensed under the MIT License.
+
 
