@@ -4,6 +4,7 @@ import datetime
 import json
 from botocore.exceptions import ClientError
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 def get_secret():
@@ -99,7 +100,7 @@ def lambda_handler(event, context):
         'weather_description': weather_description,
         'humidity': humidity,
         'wind_speed': wind_speed,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now(ZoneInfo("America/New_York")).isoformat()
         }
 
         s3 = boto3.client('s3')
