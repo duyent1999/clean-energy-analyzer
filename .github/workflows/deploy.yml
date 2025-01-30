@@ -85,7 +85,7 @@ jobs:
             cache-from: type=gha
             cache-to: type=gha,mode=max
             build-args: |
-              FRONTEND_API_ENDPOINT=${{ secrets.FRONTEND_API_ENDPOINT}}
+              VITE_API_ENDPOINT=${{ secrets.VITE_API_ENDPOINT}}
 
       - name: Update ECS Service (Optional)
         if: success()
