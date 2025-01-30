@@ -105,7 +105,7 @@ def lambda_handler(event, context):
 
         s3 = boto3.client('s3')
         bucket_name = 'clean-energy-bucket'
-        file_key = f'weather-data/{city}/{city}.json'
+        file_key = f'weather-data/{city}_{transformed_data["timestamp"]}.json'
 
         s3.put_object(
         Bucket=bucket_name,
