@@ -77,12 +77,22 @@ jobs:
         with:
             context: ./frontend  
             file: ./frontend/Dockerfile 
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/clean-energy-forecast:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/clean-energy-forecast:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            FRONTEND_API_ENDPOINT=${{ secrets.FRONTEND_API_ENDPOINT}}
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: |
+              ${{ secrets.DOCKER_HUB_USERNAME }}/clean-energy-forecast:latest
+              ${{ secrets.DOCKER_HUB_USERNAME }}/clean-energy-forecast:${{ github.sha }}
+            cache-from: type=gha
+            cache-to: type=gha,mode=max
+            build-args: |
+              FRONTEND_API_ENDPOINT=${{ secrets.FRONTEND_API_ENDPOINT}}
+
+      - name: Update ECS Service (Optional)
+        if: success()
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ./terraform/ecs-task-definition.json
+          service: clean-energy-service
+          cluster: energy-cluster
+          wait-for-service-stability: true
+  
