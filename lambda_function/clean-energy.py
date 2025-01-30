@@ -39,6 +39,36 @@ VALID_CITIES = {
         'lon': -72.6734,
         'state': 'CT'
     },
+    'Philadelphia': {
+        'lat': 39.9525,
+        'lon': -75.1652,
+        'state': 'PA'
+    },
+    'Washington, D.C.': {
+        'lat': 38.9072,
+        'lon': -77.0369,
+        'state': 'DC'
+    },
+    'Miami': {
+        'lat': 25.7617,
+        'lon': -80.1918,
+        'state': 'FL'
+    },
+    'Atlanta': {
+        'lat': 33.7490,
+        'lon': -84.3880,
+        'state': 'GA'
+    },
+    'Charlotte': {
+        'lat': 35.2271,
+        'lon': -80.8431,
+        'state': 'NC'
+    },
+    'Baltimore': {
+        'lat': 39.2904,
+        'lon': -76.6122,
+        'state': 'MD'
+    }
 }
 
 
