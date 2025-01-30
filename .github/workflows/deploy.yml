@@ -75,8 +75,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+            context: ./frontend  
+            file: ./frontend/Dockerfile 
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
@@ -86,13 +86,3 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             FRONTEND_API_ENDPOINT=${{ secrets.FRONTEND_API_ENDPOINT}}
-
-      - name: Update ECS Service (Optional)
-        if: success()
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ./terraform/ecs-task-definition.json
-          service: clean-energy-service
-          cluster: energy-cluster
-          wait-for-service-stability: true
-  
