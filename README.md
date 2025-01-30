@@ -10,7 +10,7 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Deployment Instructions](#deployment-instructions)
-3. [Architecture Diagram][#Architecture-Diagram]
+3. [Architecture Diagram](#architecture-diagram)
 
 ---
 
