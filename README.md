@@ -8,8 +8,9 @@
 - **CI/CD:** GitHub Actions
 
 ## Table of Contents
-1. [Deployment Instructions](#deployment-instructions)
-2. [Overview](#pipeline-overview)
+1. [Overview](#overview)
+2. [Deployment Instructions](#deployment-instructions)
+3. [Architecture Diagram][#architecture-diagram]
 
 ---
 
@@ -43,12 +44,12 @@
    ```sh
    cd frontend/my-app
    docker build -t frontend-app .
-   docker run -d -p 3000:3000 frontend-app
+   docker run -d -p 8000:80 frontend-app
    ```
 
 4. **Testing the Deployment:**
 
-- Access the frontend at http://localhost:3000
+- Access the frontend at http://localhost:8000
 - Use the UI to send requests to the API Gateway and validate responses
 
 ---
@@ -61,3 +62,7 @@
 - **CI/CD:** GitHub Actions
 
 ---
+## Architecture Diagram
+
+#![Architecture Diagram](clean_energy.drawio.png)
+
