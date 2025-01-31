@@ -44,12 +44,12 @@
    ```sh
    cd frontend/my-app
    docker build -t frontend-app .
-   docker run -d -p 8000:80 frontend-app
+   docker run -d -p 8080:80 frontend-app
    ```
 
 4. **Testing the Deployment:**
 
-- Access the frontend at http://localhost:8000
+- Access the frontend at [http://localhost:8080](http://localhost:8080/)
 - Use the UI to send requests to the API Gateway and validate responses
 
 ---
